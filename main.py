@@ -1,10 +1,15 @@
 from fastapi import FastAPI, Depends
+from fastapi.staticfiles import StaticFiles # 1. ADD THIS IMPORT
 from sqlalchemy.orm import Session
 from database import SessionLocal
 import models
 
 app = FastAPI()
 
+# 2. ADD THIS LINE RIGHT HERE
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+# ... rest of your code ...
 # Dependency to get the DB session
 def get_db():
     db = SessionLocal()
