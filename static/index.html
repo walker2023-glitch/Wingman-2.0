@@ -1148,6 +1148,14 @@ async function submitPost() {
     } catch (e) { console.error("Post failed", e); }
 }
 
+    async function handleLike(dateId) {
+    const response = await fetch(`/api/dates/${dateId}/like`, { method: 'POST' });
+    const data = await response.json();
+    // Update the number next to the heart on the screen
+    const likeSpan = document.getElementById(`like-count-${dateId}`);
+    if (likeSpan) likeSpan.innerText = data.likes;
+}
+
 async function loadPosts(dateId) {
     try {
         const response = await fetch(`/api/posts/${dateId}`);
