@@ -292,6 +292,13 @@
           <option value="any">Any</option>
           <option value="car">🚗 Has Car</option>
           <option value="nocar">🚶 No Car</option>
+          <div class="filter-group">
+            <label for="filter-sort">Sort By</label>
+            <select id="filter-sort" onchange="renderCards()">
+            <option value="newest">Newest</option>
+            <option value="likes">Most Recommended ❤️</option>
+            </select>
+          </div>
         </select>
       </div>
 
@@ -653,6 +660,10 @@ window.onload = fetchDates;
 
         return true;
       });
+      if (document.getElementById('filter-sort').value === 'likes') {
+        filtered.sort((a, b) => (b.likes || 0) - (a.likes || 0));
+    }
+    return filtered;
     }
 
     // ─────────────────────────────────────────────────────────────────
