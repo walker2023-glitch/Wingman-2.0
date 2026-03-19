@@ -20,3 +20,11 @@ class Review(Base):
     text = Column(String)
     date_id = Column(Integer, ForeignKey("dates.id"))
     date = relationship("DateIdea", back_populates="reviews")
+
+class Post(Base):
+    __tablename__ = "posts"
+    id = Column(Integer, primary_key=True, index=True)
+    content = Column(String)
+    date_id = Column(Integer, ForeignKey("dates.id"))
+    # This links the post to a specific date idea
+    date = relationship("DateIdea")
