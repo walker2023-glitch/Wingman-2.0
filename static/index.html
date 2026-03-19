@@ -144,6 +144,24 @@
     .voucher-btn.unlock{background:#111;color:#fff;box-shadow:0 10px 24px rgba(0,0,0,0.12)}
     .voucher-btn.copy{background:linear-gradient(90deg,#111,#333);color:#fff}
 
+    .btn-like {
+    background: var(--warm-white);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 6px 12px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    }
+    .btn-like:hover {
+        border-color: var(--blush);
+        background: var(--blush-light);
+        transform: scale(1.05);
+    }
+    
     /* Paywall modal */
     .paywall-backdrop{
       position:fixed;inset:0;background:rgba(0,0,0,0.55);
@@ -356,27 +374,114 @@
   </div>
 
   <!-- Detail modal (AI Wingman) -->
-  <div class="detail-backdrop detail-hidden" id="detailBackdrop" aria-hidden="true">
-    <div class="detail-panel" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
-      <button class="detail-close" id="detailClose" aria-label="Close">✕</button>
+ <div class="detail-backdrop detail-hidden" id="detailBackdrop" aria-hidden="true">
+  <div class="detail-panel" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
+    <button class="detail-close" id="detailClose" aria-label="Close">✕</button>
+    
+    <div class="detail-header">
+      <div>
+        <div class="detail-title" id="detailTitle">Date Idea</div>
+        <div class="detail-sub" id="detailSub"></div>
+      </div>
+      <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;">
+        <button class="btn btn-ghost" id="detailShare">Copy Summary</button>
+        <button class="btn btn-dark" id="detailClose2">Back</button>
+      </div>
+    </div>
 
-      <div class="detail-header">
-        <div>
-          <div class="detail-title" id="detailTitle">Date Idea</div>
-          <div class="detail-sub" id="detailSub"></div>
+    <div class="detail-grid">
+      <div class="panel">
+        <h3>Details</h3>
+        <div id="detailBody"></div>
+        <div id="detailVoucherMount"></div>
+      </div>
+
+      <div class="panel">
+        <h3>Community Feed 💬</h3>
+        <div id="posts-container" style="max-height: 200px; overflow-y: auto; margin-bottom: 15px; border-bottom: 1px solid var(--border);">
+            </div>
+        <textarea id="post-input" placeholder="How was the date?" style="width:100%; border: 1.5px solid var(--border); border-radius:10px; padding:10px; margin-bottom: 10px;"></textarea>
+        <button class="btn btn-primary" style="width: 100%;" onclick="submitPost()">Post Review</button>
+      </div>
+
+      <div class="panel wm-span2">
+        <h3>AI Wingman ✨</h3>
+        <p style="color:var(--muted); font-size:0.95rem; margin-bottom:10px;">
+          Help determine how you are going to ask them out!
+        </p>
+
+        <div class="wm-controls">
+          <div>
+            <label for="wmTone">Tone</label>
+            <select id="wmTone">
+              <option value="sweet">Sweet</option>
+              <option value="funny">Funny</option>
+              <option value="confident">Confident</option>
+              <option value="chill">Chill</option>
+            </select>
+          </div>
+          <div>
+            <label for="wmGoal">Goal</label>
+            <select id="wmGoal">
+              <option value="invite">Invite them</option>
+              <option value="plan">Make a plan</option>
+              <option value="followup">Follow-up after</option>
+            </select>
+          </div>
+          <div>
+            <label for="wmLength">Length</label>
+            <select id="wmLength">
+              <option value="short">Short</option>
+              <option value="medium" selected>Medium</option>
+              <option value="long">Long</option>
+            </select>
+          </div>
+          <div>
+            <label for="wmEmoji">Emojis</label>
+            <select id="wmEmoji">
+              <option value="none">None</option>
+              <option value="light" selected>Light</option>
+              <option value="more">More</option>
+            </select>
+          </div>
+          <div class="wm-span2">
+            <label for="wmContext">Optional context (names, schedule, vibe)</label>
+            <input type="text" id="wmContext" placeholder="e.g., Her name is Sarah. We’re free Thursday. Keep it casual." />
+          </div>
+          <div class="wm-span2">
+            <label for="wmBold">Boldness</label>
+            <input class="wm-slider" id="wmBold" type="range" min="0" max="10" value="4" />
+            <div style="display:flex; justify-content:space-between; font-size:0.78rem; color:var(--muted); margin-top:6px;">
+              <span>Formal</span><span>Casual</span>
+            </div>
+          </div>
         </div>
-        <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;">
-          <button class="btn btn-ghost" id="detailShare">Copy Summary</button>
-          <button class="btn btn-dark" id="detailClose2">Back</button>
+
+        <div class="wm-message" style="margin-top:12px;">
+          <div id="wmStatus" style="color:var(--muted); font-size:0.85rem; margin-bottom:8px;">Demo mode: generated locally</div>
+          <div class="text" id="wmText">Click <strong>Generate</strong> to get a message.</div>
+        </div>
+
+        <div class="wm-actions">
+          <button class="btn btn-dark" id="wmCopy">Copy</button>
+          <button class="btn btn-primary" id="wmGenerate">Generate</button>
         </div>
       </div>
+    </div> </div>
+</div>
 
       <div class="detail-grid">
         <div class="panel">
-          <h3>Details</h3>
-          <div id="detailBody" style="color:var(--charcoal); line-height:1.6;"></div>
-          <div id="detailVoucherMount" style="margin-top:12px;"></div>
+        <h3>Details</h3>
+        <div id="detailBody"></div>
+        <div id="detailVoucherMount"></div>
+    </div>
+
+
+    <div class="panel wm-span2">
+        <h3>AI Wingman ✨</h3>
         </div>
+</div>
 
         <div class="panel">
           <h3>AI Wingman ✨</h3>
@@ -598,7 +703,12 @@ window.onload = fetchDates;
           <div class="card-body">
             <div class="card-top">
               <h2 class="card-title">${idea.name}</h2>
-              <span class="budget-badge">${idea.budget}</span>
+              <div style="display:flex; align-items:center; gap:8px;">
+               <button class="btn-like" onclick="event.stopPropagation(); handleLike(${idea.id})">
+                ❤️ <span id="like-count-${idea.id}">${idea.likes || 0}</span>
+               </button>
+               <span class="budget-badge">${idea.budget}</span>
+              </div>
             </div>
 
             <p class="card-desc">${idea.description}</p>
@@ -990,6 +1100,42 @@ window.onload = fetchDates;
         alert('Copy failed.\n\n' + text);
       }
     });
+    async function handleLike(dateId) {
+    try {
+        const response = await fetch(`/api/dates/${dateId}/like`, { method: 'POST' });
+        const data = await response.json();
+        // This updates the heart counter instantly on the screen
+        document.getElementById(`like-count-${dateId}`).innerText = data.likes;
+    } catch (e) { console.error("Like failed", e); }
+}
+
+async function submitPost() {
+    const content = document.getElementById('post-input').value;
+    if (!content || !currentIdea) return;
+
+    try {
+        await fetch('/api/posts', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ content: content, date_id: currentIdea.id })
+        });
+        document.getElementById('post-input').value = '';
+        loadPosts(currentIdea.id); // Refresh the list
+    } catch (e) { console.error("Post failed", e); }
+}
+
+async function loadPosts(dateId) {
+    try {
+        const response = await fetch(`/api/posts/${dateId}`);
+        const posts = await response.json();
+        const container = document.getElementById('posts-container');
+        container.innerHTML = posts.map(p => `
+            <div style="padding:8px; border-bottom:1px solid #eee; font-size:0.9rem;">
+                ${p.content}
+            </div>
+        `).join('') || '<p style="color:var(--muted); font-size:0.8rem;">No reviews yet.</p>';
+    } catch (e) { console.error("Load posts failed", e); }
+}
 
     // ─────────────────────────────────────────────────────────────────
     // Wire filters
