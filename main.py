@@ -47,3 +47,22 @@ def create_post(post: PostCreate, db: Session = Depends(get_db)):
 @app.get("/api/posts/{date_id}")
 def get_posts(date_id: int, db: Session = Depends(get_db)):
     return db.query(models.Post).filter(models.Post.date_id == date_id).all()
+
+
+import math # Add this to your imports at the top
+
+class PredictionInput(BaseModel):
+    interests: int
+    hours: int
+    notice: int
+    people: int
+
+@app.post("/api/predict")
+def predict_success(data: PredictionInput):
+    # Your R Model Coefficients
+    b0, b1, b2, b3, b4 = -5.671, 0.322, 0.111, 0.344, -0.389
+    
+    logit = b0 + (b1 * data.interests) + (b2 * data.hours) + (b3 * data.notice) + (b4 * data.people)
+    prob = 1 / (1 + math.exp(-logit))
+    
+    return {"chance": f"{round(prob * 100, 1)}%"}
