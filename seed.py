@@ -6,7 +6,6 @@ init_db()
 db = SessionLocal()
 
 # Your Rexburg data parsed into Python objects
-raw_data = [
     raw_data = [
     {"name": "Mini Golf at FatCats", "description": "Play a round of mini golf, challenge each other at the arcade, and see who wins the most tickets.", "category": "Games/Activities", "budget": "$$"},
     {"name": "Ice Cream at Kiwi Loco", "description": "Build your own frozen yogurt with a mountain of toppings.", "category": "Food", "budget": "$"},
@@ -28,7 +27,7 @@ raw_data = [
     {"name": "Red Rabbit Grill", "description": "A calm stroll and a real dinner-date vibe.", "category": "Food", "budget": "$$$"},
     {"name": "Swig Soda Run", "description": "Grab custom sodas and do a cozy car chat session.", "category": "Food", "budget": "$"}
 ]
-]
+
 
 for item in raw_data:
     date = DateIdea(**item)
