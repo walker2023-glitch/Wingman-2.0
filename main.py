@@ -66,3 +66,13 @@ def predict_success(data: PredictionInput):
     prob = 1 / (1 + math.exp(-logit))
     
     return {"chance": f"{round(prob * 100, 1)}%"}
+
+@app.post("/api/dates/{date_id}/like")
+def like_date(date_id: int, db: Session = Depends(get_db)):
+    date = db.query(models.DateIdea).filter(models.DateIdea.id == date_id).first()
+    if date:
+        date.likes += 1
+        db.commit()
+        db.refresh(date) # This updates the object with the new count
+        return {"likes": date.likes}
+    return {"error": "Date not found"}
