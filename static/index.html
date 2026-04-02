@@ -205,4 +205,185 @@
 <div class="modal-backdrop" id="detailBackdrop" onclick="if(event.target==this) closeDetail()">
   <div class="modal-panel">
     <button onclick="closeDetail()" style="float:right; border:none; background:none; font-size:24px; cursor:pointer; color: var(--muted);">✕</button>
-    <h2 id="detailTitle" style
+    <h2 id="detailTitle" style="font-family:'Playfair Display'; font-size:2.4rem; color: var(--charcoal);"></h2>
+    
+    <div class="detail-grid">
+      <div class="panel">
+        <h3>Details</h3>
+        <p id="detailBody" style="margin-top:15px; line-height:1.7; color: var(--charcoal);"></p>
+        <div id="detailMeta" style="margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap;"></div>
+        
+        <button class="btn-primary" style="margin-top:25px; background:var(--blush); width:100%;" onclick="closeDetail(); openCalculator();">
+          Check Success Probability for this Date
+        </button>
+      </div>
+
+      <div class="panel">
+        <h3>Community Feed 💬</h3>
+        <div id="posts-container" style="max-height:180px; overflow-y:auto; margin-bottom:15px; border-bottom: 1px solid var(--border);"></div>
+        <textarea id="post-input" placeholder="How was the experience?" style="width:100%; height:70px; margin-bottom:12px; border-radius:12px; padding:12px; border:1.5px solid var(--border); font-family:inherit; font-size: 0.9rem;"></textarea>
+        <button class="btn-primary" style="width:100%" onclick="submitPost()">Post Review</button>
+      </div>
+
+      <div class="panel" style="grid-column: 1 / -1;">
+        <h3>AI Wingman ✨</h3>
+        <p style="font-size: 0.9rem; color: var(--muted); margin-bottom: 15px;">Tell us the vibe and we'll draft the invite text for you.</p>
+        <div style="display:flex; gap:12px; margin-bottom:10px;">
+            <select id="wmTone" style="padding:12px; border-radius:12px; border:1.5px solid var(--border); flex:1; font-family: inherit;">
+                <option value="sweet">Sweet & Thoughtful</option>
+                <option value="funny">Funny & Competitive</option>
+                <option value="chill">Chill & Casual</option>
+            </select>
+            <button class="btn-primary" onclick="generateMsg()">Generate Text</button>
+        </div>
+        <div id="wmText" class="wm-message">Click Generate to get a message.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let dateIdeas = [];
+let currentIdea = null;
+
+async function fetchDates() {
+  const response = await fetch('/api/dates');
+  dateIdeas = await response.json();
+  renderCards();
+}
+
+function buildCard(idea, idx) {
+  const carPill = idea.needs_car ? `<span class="meta-pill">🚗 Needs Car</span>` : `<span class="meta-pill walk">🚶 Walkable</span>`;
+  const typePill = idea.dateType === 'group' ? `<span class="meta-pill">👥 Group Date</span>` : `<span class="meta-pill">👫 Single or Group</span>`;
+  
+  return `
+    <article class="date-card" onclick="openDetail(${idx})">
+      <div class="card-body">
+        <div class="card-top">
+          <h2 class="card-title">${idea.name}</h2>
+          <div style="display:flex; gap:8px; align-items:center;">
+            <button class="btn-like" style="background:none; border:1.5px solid var(--border); border-radius:10px; padding:5px 10px; cursor:pointer;" onclick="event.stopPropagation(); handleLike(${idea.id})">
+              ❤️ <span id="like-count-${idea.id}">${idea.likes || 0}</span>
+            </button>
+            <span class="budget-badge">${idea.budget || '$'}</span>
+          </div>
+        </div>
+        <p style="font-size:0.88rem; color:var(--muted); line-height:1.5; margin: 5px 0;">${idea.description}</p>
+        <p style="font-size:0.78rem; color:var(--blush); font-weight:700;">📍 ${idea.location || "Rexburg"}</p>
+        <div class="card-meta">
+            ${carPill}
+            ${typePill}
+            <span class="meta-pill">🏠 ${idea.category}</span>
+        </div>
+      </div>
+    </article>`;
+}
+
+function renderCards() {
+  const car = document.getElementById('filter-car').value;
+  const cat = document.getElementById('filter-category').value;
+  const sort = document.getElementById('filter-sort').value;
+  const budget = document.getElementById('filter-budget').value;
+  const dur = document.getElementById('filter-duration').value;
+  const type = document.getElementById('filter-datetype').value;
+  const student = document.getElementById('filter-student').checked;
+
+  let filtered = dateIdeas.filter(i => {
+    if (car === 'car' && !i.needs_car) return false;
+    if (car === 'nocar' && i.needs_car) return false;
+    if (cat !== 'any' && i.category !== cat) return false;
+    if (budget !== 'any' && i.budget !== budget) return false;
+    if (dur !== 'any' && i.duration !== dur) return false;
+    if (type !== 'any' && i.dateType !== type && i.dateType !== 'both') return false;
+    if (student && !i.hasStudentDiscount) return false;
+    return true;
+  });
+
+  if (sort === 'likes') filtered.sort((a, b) => (b.likes || 0) - (a.likes || 0));
+  document.getElementById('cards-grid').innerHTML = filtered.map(i => buildCard(i, dateIdeas.indexOf(i))).join('');
+  document.getElementById('results-count').innerHTML = `<strong>${filtered.length}</strong> date ideas found`;
+}
+
+function openDetail(idx) {
+  currentIdea = dateIdeas[idx];
+  document.getElementById('detailTitle').innerText = currentIdea.name;
+  document.getElementById('detailBody').innerText = currentIdea.description;
+  document.getElementById('detailMeta').innerHTML = `
+    <span class="meta-pill">${currentIdea.needs_car ? '🚗 Vehicle Required' : '🚶 Walkable'}</span>
+    <span class="meta-pill">⏱️ ${currentIdea.duration || 'Any'}</span>
+    <span class="meta-pill">💰 Budget: ${currentIdea.budget}</span>
+  `;
+  document.getElementById('detailBackdrop').classList.add('active');
+  document.getElementById('wmText').innerText = "Click Generate to get a message."; 
+  loadPosts(currentIdea.id);
+}
+
+function closeDetail() { document.getElementById('detailBackdrop').classList.remove('active'); }
+function openCalculator() { document.getElementById('calcModal').classList.add('active'); }
+function closeCalculator() { document.getElementById('calcModal').classList.remove('active'); }
+
+async function runPrediction() {
+  const payload = {
+    interests: parseInt(document.getElementById('calc-interests').value),
+    hours: parseInt(document.getElementById('calc-hours').value),
+    notice: parseInt(document.getElementById('calc-notice').value),
+    people: parseInt(document.getElementById('calc-people').value)
+  };
+
+  const res = await fetch('/api/predict', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  });
+  const data = await res.json();
+  
+  document.getElementById('calc-result').style.display = 'block';
+  document.getElementById('chance-percent').innerText = data.chance;
+  const pct = parseFloat(data.chance);
+  document.getElementById('chance-advice').innerText = pct > 75 ? "High Success Probability! The statistical model suggests clear skies ahead." : pct > 45 ? "Moderate Odds. Consider more prep hours to boost the likelihood." : "Statistically Risky. We suggest checking notice days or interest alignment.";
+}
+
+function generateMsg() {
+  if(!currentIdea) return;
+  const tone = document.getElementById('wmTone').value;
+  const openers = {
+    sweet: `Hey! I saw this date idea for ${currentIdea.name} and it really made me think of you. Would you like to go this week?`,
+    funny: `I challenge you to ${currentIdea.name}. Loser has to buy the next round of drinks. You down?`,
+    chill: `Thinking about checking out ${currentIdea.name} later. If you're free, you should definitely come along.`
+  };
+  document.getElementById('wmText').innerText = openers[tone];
+}
+
+async function handleLike(id) {
+  const res = await fetch(`/api/dates/${id}/like`, { method: 'POST' });
+  const data = await res.json();
+  document.getElementById(`like-count-${id}`).innerText = data.likes;
+  const idea = dateIdeas.find(i => i.id === id);
+  if(idea) idea.likes = data.likes;
+}
+
+async function submitPost() {
+  const content = document.getElementById('post-input').value;
+  if(!content) return;
+  await fetch('/api/posts', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ content, date_id: currentIdea.id })
+  });
+  document.getElementById('post-input').value = '';
+  loadPosts(currentIdea.id);
+}
+
+async function loadPosts(id) {
+  const res = await fetch(`/api/posts/${id}`);
+  const posts = await res.json();
+  document.getElementById('posts-container').innerHTML = posts.map(p => `
+    <div style="padding:12px; border-bottom:1px solid #f0f0f0; font-size:0.85rem; color: var(--charcoal);">
+      ${p.content}
+    </div>`).join('') || '<p style="color:var(--muted); font-size:0.8rem; padding:15px; font-style: italic;">No reviews yet. Be the first!</p>';
+}
+
+window.onload = fetchDates;
+</script>
+</body>
+</html>
