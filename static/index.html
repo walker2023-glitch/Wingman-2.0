@@ -16,62 +16,69 @@
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--charcoal);min-height:100vh}
 
-    /* Layout Components */
+    /* Original Header Styles */
     .site-header{ background:var(--warm-white); border-bottom:1.5px solid var(--border); padding:48px 24px 36px; text-align:center; position:relative; overflow:hidden; }
-    .site-logo{ width: 86px; height: 86px; object-fit: cover; border-radius: 18px; box-shadow: 0 10px 26px rgba(44,42,40,0.12); border: 1.5px solid rgba(236,221,213,0.9); background: #fff; margin-bottom: 15px;}
+    .header-inner{ position: relative; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+    .site-logo{ width: 86px; height: 86px; object-fit: cover; border-radius: 18px; box-shadow: 0 10px 26px rgba(44,42,40,0.12); border: 1.5px solid rgba(236,221,213,0.9); background: #fff; }
     .site-header h1{ font-family:'Playfair Display',serif; font-size:clamp(2.2rem,6vw,3.8rem); font-weight:700; color:var(--charcoal); line-height:1.1; }
     .site-header h1 span{color:var(--blush)}
+    .header-eyebrow{ font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase; color:var(--blush); margin-bottom:10px; }
 
-    /* Filter bar & Circular Button */
+    /* Filter bar & Success Button */
     .filter-section{ background:var(--warm-white); border-bottom:1.5px solid var(--border); padding:20px 24px; position:sticky; top:0; z-index:100; box-shadow:0 2px 12px rgba(44,42,40,0.06); }
-    .filter-inner{ max-width:1100px; margin:0 auto; display:flex; flex-wrap:wrap; gap:16px; align-items:center; }
+    .filter-inner{ max-width:1100px; margin:0 auto; display:flex; flex-wrap:wrap; gap:16px; align-items:flex-end; }
     .filter-group{ display:flex; flex-direction:column; gap:6px; flex:1; min-width:140px; }
+    .filter-group label{ font-size:11px; font-weight:600; text-transform:uppercase; color:var(--muted); }
     .filter-group select{ appearance:none; background:var(--cream) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237a7470' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 14px center; border:1.5px solid var(--border); border-radius:10px; padding:9px 36px 9px 14px; font-size:.9rem; cursor:pointer; }
     
-    .btn-circle { width: 60px; height: 60px; border-radius: 50%; background: var(--blush); color: white; border: none; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 0.65rem; font-weight: 700; text-align: center; line-height: 1; box-shadow: 0 4px 15px rgba(244,96,122,0.3); transition: transform 0.2s; flex-shrink: 0;}
+    .btn-circle { width: 55px; height: 55px; border-radius: 50%; background: var(--blush); color: white; border: none; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 0.6rem; font-weight: 800; box-shadow: 0 4px 12px rgba(244,96,122,0.3); transition: 0.2s; flex-shrink: 0; margin-bottom: 5px;}
     .btn-circle:hover { transform: scale(1.1); background: #e0526b; }
-    .btn-circle span { font-size: 1.2rem; margin-bottom: 2px; }
 
-    /* Cards */
+    /* Toggle Switch */
+    .toggle-label{ display:flex;align-items:center;gap:10px;cursor:pointer;padding:9px 14px;border:1.5px solid var(--border); border-radius:10px;background:var(--cream); font-size:.9rem; color:var(--muted); }
+    .toggle-track{width:34px;height:20px;background:var(--border);border-radius:100px;position:relative;transition:0.2s;flex-shrink:0}
+    .toggle-track::after{content:'';position:absolute;width:14px;height:14px;background:#fff;border-radius:50%;top:3px;left:3px;transition:0.2s}
+    input[type="checkbox"]:checked ~ .toggle-track{background:var(--sage)}
+    input[type="checkbox"]:checked ~ .toggle-track::after{transform:translateX(14px)}
+
+    /* Cards Grid */
     .cards-grid{ max-width:1100px; margin:0 auto; padding:32px 24px 64px; display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:24px; }
-    .date-card{ background:#fff; border-radius:var(--radius); border:1.5px solid var(--border); box-shadow:var(--shadow); overflow:hidden; display:flex; flex-direction:column; transition:transform .22s ease; cursor:pointer; position: relative;}
+    .date-card{ background:#fff; border-radius:var(--radius); border:1.5px solid var(--border); box-shadow:var(--shadow); overflow:hidden; display:flex; flex-direction:column; transition:0.22s ease; cursor:pointer; }
     .date-card:hover{ transform:translateY(-4px); box-shadow:var(--shadow-hover); }
     .card-body{ padding:22px; flex:1; display:flex; flex-direction:column; gap:10px; }
-    .card-top{ display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 5px;}
-
-    /* Meta Pills */
-    .card-meta{ display:flex; flex-wrap:wrap; gap:8px; margin-top:auto; padding-top:12px; border-top:1px solid var(--border); }
+    .budget-badge{ background:var(--blush-light); color:var(--rust); font-size:.8rem; font-weight:700; padding:4px 10px; border-radius:100px; }
     .meta-pill{ display:inline-flex; align-items:center; gap:5px; font-size:.78rem; font-weight:500; padding:4px 10px; border-radius:100px; border:1.5px solid var(--border); color:var(--muted); background:var(--cream) }
     .meta-pill.car{color:#c06b2b; border-color:#f9d0b4; background:#fff4ee}
     .meta-pill.walk{color:#3a8a5a; border-color:#b8e4cc; background:var(--sage-light)}
-    .budget-badge{background:var(--blush-light); color:var(--rust); font-size:.8rem; font-weight:700; padding:4px 10px; border-radius:100px;}
 
     /* Modals */
     .modal-backdrop { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.55); display: none; place-items: center; padding: 18px; z-index: 9998; }
     .modal-backdrop.active { display: grid; }
     .modal-panel { width: min(920px, 100%); max-height: 90vh; overflow: auto; background: #fff; border-radius: 20px; padding: 24px; position: relative; }
-    .detail-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 20px; margin-top: 20px; }
+    .panel { border: 1.5px solid var(--border); background: var(--warm-white); border-radius: 16px; padding: 18px; margin-bottom: 15px;}
+    .detail-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 20px; margin-top: 20px; }
     @media (max-width: 800px) { .detail-grid { grid-template-columns: 1fr; } }
-    .panel { border: 1.5px solid var(--border); background: var(--warm-white); border-radius: 16px; padding: 18px; }
 
-    /* Success Calculator Slider Styles */
-    .calc-row { margin-bottom: 15px; }
-    .calc-row label { display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 600; margin-bottom: 5px; color: var(--muted); }
-    input[type=range] { width: 100%; cursor: pointer; accent-color: var(--blush); }
-    .result-box { background: var(--charcoal); color: white; padding: 20px; border-radius: 15px; text-align: center; margin-top: 20px; }
-    .result-box h4 { font-family: 'Playfair Display'; font-size: 2.5rem; margin: 10px 0; color: var(--blush-light); }
+    /* Success Calculator Specific Styles */
+    .calc-help { font-size: 0.75rem; color: var(--muted); margin-bottom: 12px; line-height: 1.3; font-style: italic; }
+    input[type=range] { width: 100%; accent-color: var(--blush); cursor: pointer; }
+    .result-box { background: var(--charcoal); color: white; padding: 25px; border-radius: 15px; text-align: center; margin-top: 20px; animation: cardIn 0.3s ease; }
+    .result-box h4 { font-family: 'Playfair Display'; font-size: 2.8rem; color: var(--blush-light); margin: 10px 0; }
+    @keyframes cardIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 
-    .btn-primary { background: var(--sage); color: #fff; padding: 10px 16px; border-radius: 999px; border: none; font-weight: 800; cursor: pointer; transition: 0.2s; }
-    .btn-primary:hover { opacity: 0.9; transform: scale(1.02); }
+    .btn-primary { background: var(--sage); color: #fff; padding: 12px 20px; border-radius: 999px; border: none; font-weight: 800; cursor: pointer; transition: 0.2s; }
+    .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
   </style>
 </head>
 <body>
 
 <header class="site-header">
-  <img class="site-logo" src="/static/images/wingman-logo (1).png" alt="Wingman logo" />
-  <p class="header-eyebrow">Rexburg, Idaho · BYU-I</p>
-  <h1>Rexburg <span>Wingman</span></h1>
-  <p>Helping you focus on the who, while we handle the where.</p>
+  <div class="header-inner">
+    <img class="site-logo" src="/static/images/wingman-logo (1).png" alt="Wingman logo" />
+    <p class="header-eyebrow">Rexburg, Idaho · BYU-I</p>
+    <h1>Rexburg <span>Wingman</span></h1>
+    <p>Focus on the who and why, while we handle the where and when.</p>
+  </div>
 </header>
 
 <section class="filter-section">
@@ -93,44 +100,71 @@
         <option value="Games/Activities">🎳 Games</option>
       </select>
     </div>
+    <div class="filter-group">
+      <label>Sort By</label>
+      <select id="filter-sort" onchange="renderCards()">
+        <option value="newest">Newest</option>
+        <option value="likes">Recommended ❤️</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>Student Discount</label>
+      <label class="toggle-label">
+        <input type="checkbox" id="filter-student" style="display:none" onchange="renderCards()">
+        <span class="toggle-track"></span>
+        Only discounts
+      </label>
+    </div>
     
     <button class="btn-circle" onclick="openCalculator()">
-      <span>📈</span>Success?
+      <span>📈</span>STATS
     </button>
   </div>
 </section>
+
+<div style="max-width:1100px; margin:20px auto; padding:0 24px;">
+  <p id="results-count" style="font-size: 0.85rem; color: var(--muted);"></p>
+</div>
 
 <main class="cards-grid" id="cards-grid"></main>
 
 <div class="modal-backdrop" id="calcModal" onclick="if(event.target==this) closeCalculator()">
   <div class="modal-panel" style="max-width: 500px;">
     <button onclick="closeCalculator()" style="float:right; border:none; background:none; font-size:24px; cursor:pointer;">✕</button>
-    <h2 style="font-family:'Playfair Display'; margin-bottom: 20px;">Success Calculator 📊</h2>
+    <h2 style="font-family:'Playfair Display'; margin-bottom: 10px;">Success Calculator 📊</h2>
+    <p style="color:var(--muted); font-size:0.9rem; margin-bottom:20px;">Using Logistic Regression to predict the likelihood of a "Yes".</p>
     
     <div class="panel">
-      <div class="calc-row">
-        <label>Shared Interests <span id="val-interests">5</span></label>
+      <div style="margin-bottom:20px;">
+        <label style="display:flex; justify-content:space-between; font-weight:700;">Shared Interests: <span id="val-interests">5</span></label>
+        <p class="calc-help">How many common hobbies or topics do you share? High interest significantly boosts odds.</p>
         <input type="range" id="calc-interests" min="0" max="10" value="5" oninput="document.getElementById('val-interests').innerText = this.value">
       </div>
-      <div class="calc-row">
-        <label>Prep Hours <span id="val-hours">2</span></label>
+
+      <div style="margin-bottom:20px;">
+        <label style="display:flex; justify-content:space-between; font-weight:700;">Prep Hours: <span id="val-hours">2</span></label>
+        <p class="calc-help">Time spent planning logistics. Professional planning shows effort and reduces stress.</p>
         <input type="range" id="calc-hours" min="0" max="24" value="2" oninput="document.getElementById('val-hours').innerText = this.value">
       </div>
-      <div class="calc-row">
-        <label>Notice Days <span id="val-notice">3</span></label>
+
+      <div style="margin-bottom:20px;">
+        <label style="display:flex; justify-content:space-between; font-weight:700;">Notice Days: <span id="val-notice">3</span></label>
+        <p class="calc-help">How many days in advance are you asking? Last-minute asks usually have lower success rates.</p>
         <input type="range" id="calc-notice" min="0" max="14" value="3" oninput="document.getElementById('val-notice').innerText = this.value">
       </div>
-      <div class="calc-row">
-        <label>Group Size (People) <span id="val-people">2</span></label>
+
+      <div style="margin-bottom:20px;">
+        <label style="display:flex; justify-content:space-between; font-weight:700;">Group Size: <span id="val-people">2</span></label>
+        <p class="calc-help">Asking for a 1-on-1 (2 people) vs a large group date. Group sizes change the dynamic.</p>
         <input type="range" id="calc-people" min="2" max="10" value="2" oninput="document.getElementById('val-people').innerText = this.value">
       </div>
       
-      <button class="btn-primary" style="width: 100%;" onclick="runPrediction()">Calculate Odds</button>
+      <button class="btn-primary" style="width: 100%;" onclick="runPrediction()">Run Statistical Model</button>
 
       <div id="calc-result" class="result-box" style="display: none;">
-        <p>Probability of a "Yes"</p>
+        <p style="text-transform: uppercase; letter-spacing: 1px; font-size: 0.7rem;">Probability of Success</p>
         <h4 id="chance-percent">--%</h4>
-        <p id="chance-advice" style="font-size: 0.8rem; opacity: 0.8;"></p>
+        <p id="chance-advice" style="font-size: 0.85rem; opacity: 0.9;"></p>
       </div>
     </div>
   </div>
@@ -147,16 +181,30 @@
         <p id="detailBody" style="margin-top:15px; line-height:1.6;"></p>
         <div id="detailMeta" style="margin-top: 15px; display: flex; gap: 8px; flex-wrap: wrap;"></div>
         
-        <button class="btn-primary" style="margin-top: 20px; background: var(--blush);" onclick="closeDetail(); openCalculator();">
-          Check Success Probability for this Date
+        <button class="btn-primary" style="margin-top:20px; background:var(--blush); width:100%;" onclick="closeDetail(); openCalculator();">
+          Check Success Probability
         </button>
       </div>
 
       <div class="panel">
         <h3>Community Feed 💬</h3>
-        <div id="posts-container" style="max-height:180px; overflow-y:auto; margin-bottom:12px; border-bottom: 1px solid var(--border);"></div>
-        <textarea id="post-input" placeholder="Share your experience..." style="width:100%; height:60px; margin-bottom:10px; border-radius:10px; padding:10px; border: 1.5px solid var(--border); font-family: inherit;"></textarea>
+        <div id="posts-container" style="max-height:180px; overflow-y:auto; margin-bottom:12px; border-bottom:1px solid var(--border);"></div>
+        <textarea id="post-input" placeholder="How was it?" style="width:100%; height:60px; margin-bottom:10px; border-radius:10px; padding:10px; border:1.5px solid var(--border); font-family:inherit;"></textarea>
         <button class="btn-primary" style="width:100%" onclick="submitPost()">Post Review</button>
+      </div>
+
+      <div class="panel" style="grid-column: 1 / -1;">
+        <h3>AI Wingman ✨</h3>
+        <p style="font-size: 0.9rem; color: var(--muted); margin-bottom: 15px;">Pick a vibe and we'll write the text for you!</p>
+        <div style="display:flex; gap:10px; margin-bottom:15px;">
+            <select id="wmTone" style="padding:10px; border-radius:10px; border:1.5px solid var(--border); flex:1;">
+                <option value="sweet">Sweet</option>
+                <option value="funny">Funny</option>
+                <option value="chill">Chill</option>
+            </select>
+            <button class="btn-primary" onclick="generateMsg()">Generate Text</button>
+        </div>
+        <div id="wmText" style="background:#fff; padding:20px; border-radius:12px; border:1.5px dashed var(--border); min-height:60px;"></div>
       </div>
     </div>
   </div>
@@ -177,15 +225,20 @@ function buildCard(idea, idx) {
   return `
     <article class="date-card" onclick="openDetail(${idx})">
       <div class="card-body">
-        <div class="card-top">
-          <h2 class="card-title">${idea.name}</h2>
+        <div class="card-top" style="display:flex; justify-content:space-between; align-items:start;">
+          <h2 style="font-family:'Playfair Display'; font-size:1.15rem;">${idea.name}</h2>
           <div style="display:flex; gap:8px; align-items:center;">
-            <button class="btn-like" onclick="event.stopPropagation(); handleLike(${idea.id})">❤️ <span id="like-count-${idea.id}">${idea.likes || 0}</span></button>
+            <button class="btn-like" style="background:none; border:1px solid var(--border); border-radius:8px; padding:4px 8px; cursor:pointer;" onclick="event.stopPropagation(); handleLike(${idea.id})">
+              ❤️ <span id="like-count-${idea.id}">${idea.likes || 0}</span>
+            </button>
             <span class="budget-badge">${idea.budget || '$'}</span>
           </div>
         </div>
-        <p style="font-size:0.88rem; color:var(--muted); line-height:1.5;">${idea.description}</p>
-        <div class="card-meta">${carPill} <span class="meta-pill">📍 ${idea.category}</span></div>
+        <p style="font-size:0.88rem; color:var(--muted); line-height:1.5; margin: 10px 0;">${idea.description}</p>
+        <div class="card-meta">
+            ${carPill}
+            <span class="meta-pill">📍 ${idea.category}</span>
+        </div>
       </div>
     </article>`;
 }
@@ -193,30 +246,37 @@ function buildCard(idea, idx) {
 function renderCards() {
   const carFilter = document.getElementById('filter-car').value;
   const catFilter = document.getElementById('filter-category').value;
+  const sort = document.getElementById('filter-sort').value;
+  const studentOnly = document.getElementById('filter-student').checked;
+
   let filtered = dateIdeas.filter(i => {
     if (carFilter === 'car' && !i.needs_car) return false;
     if (carFilter === 'nocar' && i.needs_car) return false;
     if (catFilter !== 'any' && i.category !== catFilter) return false;
+    if (studentOnly && !i.hasStudentDiscount) return false;
     return true;
   });
+
+  if (sort === 'likes') filtered.sort((a, b) => (b.likes || 0) - (a.likes || 0));
   document.getElementById('cards-grid').innerHTML = filtered.map(i => buildCard(i, dateIdeas.indexOf(i))).join('');
+  document.getElementById('results-count').innerText = `${filtered.length} dates found`;
 }
 
-/* Modals Logic */
+/* Modal Controls */
 function openDetail(idx) {
   currentIdea = dateIdeas[idx];
   document.getElementById('detailTitle').innerText = currentIdea.name;
   document.getElementById('detailBody').innerText = currentIdea.description;
-  document.getElementById('detailMeta').innerHTML = `<span class="meta-pill">${currentIdea.needs_car ? '🚗 Vehicle Required' : '🚶 Walkable'}</span> <span class="meta-pill">💰 ${currentIdea.budget}</span>`;
+  document.getElementById('detailMeta').innerHTML = `<span class="meta-pill">${currentIdea.needs_car ? '🚗 Vehicle Required' : '🚶 Walkable'}</span> <span class="meta-pill">💰 Budget: ${currentIdea.budget}</span>`;
   document.getElementById('detailBackdrop').classList.add('active');
+  document.getElementById('wmText').innerText = ""; 
   loadPosts(currentIdea.id);
 }
 function closeDetail() { document.getElementById('detailBackdrop').classList.remove('active'); }
-
 function openCalculator() { document.getElementById('calcModal').classList.add('active'); }
 function closeCalculator() { document.getElementById('calcModal').classList.remove('active'); }
 
-/* STATS MATH LOGIC */
+/* STATS BACKEND LOGIC */
 async function runPrediction() {
   const payload = {
     interests: parseInt(document.getElementById('calc-interests').value),
@@ -232,22 +292,32 @@ async function runPrediction() {
   });
   const data = await res.json();
   
-  const resultDiv = document.getElementById('calc-result');
-  const chanceEl = document.getElementById('chance-percent');
-  const adviceEl = document.getElementById('chance-advice');
-
-  resultDiv.style.display = 'block';
-  chanceEl.innerText = data.chance;
+  document.getElementById('calc-result').style.display = 'block';
+  document.getElementById('chance-percent').innerText = data.chance;
   
   const pct = parseFloat(data.chance);
-  adviceEl.innerText = pct > 80 ? "Looks like a safe bet! Go for it." : pct > 50 ? "Decent odds. Try adding more Prep Hours!" : "Statistically risky. Check your notice days.";
+  document.getElementById('chance-advice').innerText = pct > 80 ? "The model predicts a high success rate! Send that text." : pct > 50 ? "Decent odds. A bit more planning might help." : "Statistically risky. Try planning further in advance.";
 }
 
-/* Backend interactions */
+/* AI WINGMAN LOGIC */
+function generateMsg() {
+  if(!currentIdea) return;
+  const tone = document.getElementById('wmTone').value;
+  const openers = {
+    sweet: `Hey! I saw ${currentIdea.name} and thought of you. Would you want to go this weekend?`,
+    funny: `If we go to ${currentIdea.name}, I promise to let you win... at least once. You in?`,
+    chill: `Thinking about checking out ${currentIdea.name} later. If you're free, come with!`
+  };
+  document.getElementById('wmText').innerText = openers[tone];
+}
+
+/* DB INTERACTIONS */
 async function handleLike(id) {
   const res = await fetch(`/api/dates/${id}/like`, { method: 'POST' });
   const data = await res.json();
   document.getElementById(`like-count-${id}`).innerText = data.likes;
+  const idea = dateIdeas.find(i => i.id === id);
+  if(idea) idea.likes = data.likes;
 }
 
 async function submitPost() {
@@ -265,7 +335,7 @@ async function submitPost() {
 async function loadPosts(id) {
   const res = await fetch(`/api/posts/${id}`);
   const posts = await res.json();
-  document.getElementById('posts-container').innerHTML = posts.map(p => `<div style="padding:10px; border-bottom:1px solid #eee; font-size:0.85rem;">${p.content}</div>`).join('') || '<p style="color:gray; font-size:0.8rem; padding:10px;">No reviews yet.</p>';
+  document.getElementById('posts-container').innerHTML = posts.map(p => `<div style="padding:10px; border-bottom:1px solid #f0f0f0; font-size:0.85rem;">${p.content}</div>`).join('') || '<p style="color:gray; font-size:0.8rem; padding:10px;">No reviews yet.</p>';
 }
 
 window.onload = fetchDates;
