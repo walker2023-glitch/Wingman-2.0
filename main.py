@@ -4,6 +4,12 @@ from sqlalchemy.orm import Session
 from database import SessionLocal
 import models
 
+import models
+from database import engine
+
+# This line is the "Magic Fix" for GitHub Actions
+models.Base.metadata.create_all(bind=engine)
+
 app = FastAPI()
 
 # 2. ADD THIS LINE RIGHT HERE
