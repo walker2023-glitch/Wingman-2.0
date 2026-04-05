@@ -1,17 +1,19 @@
 # Rexburg Wingman 2.0 🚀
-**Author:** Dallas (BYU-I)  
-**Stack:** FastAPI, SQLite, Docker, Pytest
+**A Data-Driven Date Planning Application**
 
-## Project Mission
-Taking the stress out of the 'where' and 'when' so couples can focus on the 'who' and 'why'.
+## 🛠️ Tech Stack
+- **Backend:** FastAPI (Python)
+- **Database:** SQLite with SQLAlchemy ORM
+- **DevOps:** Docker, GitHub Actions (CI/CD), Terraform (IaC)
 
-## How to Run Locally
-1. Install dependencies: `pip install -r requirements.txt`
-2. Run server: `uvicorn main:app --reload`
-3. View at: `http://127.0.0.1:8000/static/index.html`
+## 📊 Statistical Success Model
+This app features a custom Logistic Regression model to predict the likelihood of a "Yes" for a date invite.
+- **Interests ($b_1$):** 0.322
+- **Prep Hours ($b_2$):** 0.111
+- **Notice Days ($b_3$):** 0.344
+- **Group Size ($b_4$):** -0.389 (Negative coefficient reflects lower 1-on-1 intimacy in large groups)
 
-## Automated Testing
-Run `pytest` to verify the API and Statistical Success Model.
-
-## Docker (Coming Soon)
-Build command: `docker build -t wingman-app .`
+## 🐳 How to Run (Docker)
+1. Build: `docker build -t rexburg-wingman .`
+2. Run: `docker run -p 8000:8000 rexburg-wingman`
+3. Access at: `http://localhost:8000/static/index.html`
