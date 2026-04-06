@@ -47,10 +47,6 @@ resource "aws_instance" "wingman_app_server" {
               sudo docker run -d -p 8000:8000 walkedal006/rexburg-wingman:latest
               EOF
 
-  tags = {
-    Name = "RexburgWingman-Production"
-  }
-}
 
   tags = {
     Name = "RexburgWingman-Production"
