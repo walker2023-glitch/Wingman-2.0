@@ -2,8 +2,8 @@ provider "aws" {
   region = "us-east-1"
 }
 
-resource "aws_security_group" "wingman_sg_v3" {
-  name        = "wingman-security-group-v3"
+resource "aws_security_group" "wingman_sg_v4" {
+  name        = "wingman-sg-final-${timestamp()}" # This makes the name unique every time
   description = "Allow web traffic to Wingman App"
 
   ingress {
@@ -31,7 +31,7 @@ resource "aws_security_group" "wingman_sg_v3" {
 resource "aws_instance" "wingman_app_server" {
   ami                    = "ami-04b70fa74e45c3917"
   instance_type          = "t2.micro"
-  vpc_security_group_ids = [aws_security_group.wingman_sg_v3.id]
+  vpc_security_group_ids = [aws_security_group.wingman_sg_v4.id]
 
   user_data = <<-EOF
               #!/bin/bash
