@@ -1,3 +1,6 @@
+![Build Status](https://github.com/[your-username]/Wingman-2.0/actions/workflows/main.yml/badge.svg)
+![Docker Hub](https://img.shields.io/docker/pulls/walkedal006/rexburg-wingman)
+
 # Rexburg Wingman 2.0 🚀
 **A Data-Driven Date Planning Application**
 
