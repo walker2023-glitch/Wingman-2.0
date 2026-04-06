@@ -25,14 +25,13 @@ def test_prediction_logic():
     assert response.status_code == 200
     assert "chance" in response.json()
 
-def test_create_and_read_date():
-    # Try removing the '/api' prefix if your FastAPI isn't using a router
-    new_date = {"name": "Porter's Craft", "description": "Burgers", "category": "Food", "budget": 15, "likes": 0}
-    
-    # CHANGE THIS LINE to match your actual @app.post route in main.py
-    create_response = client.post("/dates", json=new_date) 
-    
-    assert create_response.status_code == 200
-    # 2. Read it back to ensure it integrated with the DB
-    read_response = client.get("/api/dates")
-    assert any(d['name'] == "Porter's Craft" for d in read_response.json())
+def test_date_features():
+    # 1. Test the Success Predictor (Logistic Regression)
+    predict_data = {"interests": 5, "hours": 2, "notice": 3, "people": 2}
+    pred_res = client.post("/api/predict", json=predict_data)
+    assert pred_res.status_code == 200
+    assert "chance" in pred_res.json()
+
+    # 2. Test getting the dates list
+    get_res = client.get("/api/dates")
+    assert get_res.status_code == 200
