@@ -1,5 +1,9 @@
-resource "aws_security_group" "wingman_sg_v2" {  # Changed name here
-  name        = "wingman-security-group-v2"      # Changed name here
+provider "aws" {
+  region = "us-east-1"
+}
+
+resource "aws_security_group" "wingman_sg_v3" {
+  name        = "wingman-security-group-v3"
   description = "Allow web traffic to Wingman App"
 
   ingress {
@@ -27,8 +31,7 @@ resource "aws_security_group" "wingman_sg_v2" {  # Changed name here
 resource "aws_instance" "wingman_app_server" {
   ami                    = "ami-04b70fa74e45c3917"
   instance_type          = "t2.micro"
-  # Update this reference to match the new name above
-  vpc_security_group_ids = [aws_security_group.wingman_sg_v2.id]
+  vpc_security_group_ids = [aws_security_group.wingman_sg_v3.id]
 
   user_data = <<-EOF
               #!/bin/bash
@@ -43,4 +46,8 @@ resource "aws_instance" "wingman_app_server" {
   tags = {
     Name = "RexburgWingman-Production"
   }
+}
+
+output "instance_public_ip" {
+  value = aws_instance.wingman_app_server.public_ip
 }
